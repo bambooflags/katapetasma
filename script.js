@@ -140,3 +140,113 @@ document.addEventListener('keydown', function(e) {
         }
     }
 });
+
+// MediaManager class for Google Sheets integration
+class MediaManager {
+    constructor() {
+        this.sheetId = '1yYYd5tSX8cueBMhoVt20dQODeHoR62vE0pGTV0gGqx4'; // Replace with your actual Sheet ID
+        this.sheetName = 'videos';
+        this.init();
+    }
+
+    async init() {
+        try {
+            await this.loadVideos();
+        } catch (error) {
+            console.error('Error loading videos:', error);
+            this.showError();
+        }
+    }
+
+    async loadVideos() {
+        const url = `https://opensheet.elk.sh/${this.sheetId}/${this.sheetName}`;
+        const response = await fetch(url);
+        if (!response.ok) {
+            throw new Error(`HTTP error! status: ${response.status}`);
+        }
+
+        const data = await response.json();
+        this.processVideos(data);
+    }
+
+    processVideos(data) {
+        const videos = [];
+
+        // Process each row from Google Sheets
+        for (let i = 0; i < data.length; i++) {
+            const row = data[i];
+
+            if (row && row.Title && row.Link) {
+                // Clean up data (remove quotes if present)
+                const title = row.Title.replace(/"/g, '');
+                const description = row.Description ? row.Description.replace(/"/g, '') : '';
+                const link = row.Link.replace(/"/g, '');
+
+                // Extract YouTube video ID from URL
+                const videoId = this.extractVideoId(link);
+
+                if (videoId) {
+                    videos.push({
+                        title,
+                        description,
+                        link,
+                        videoId,
+                        thumbnail: `https://img.youtube.com/vi/${videoId}/maxresdefault.jpg`
+                    });
+                }
+            }
+        }
+
+        this.renderVideos(videos);
+    }
+
+    extractVideoId(url) {
+        // Extract YouTube video ID from various URL formats
+        const regex = /(?:youtube\.com\/watch\?v=|youtu\.be\/|youtube\.com\/embed\/)([^&\n?#]+)/;
+        const match = url.match(regex);
+        return match ? match[1] : null;
+    }
+
+    renderVideos(videos) {
+        const container = document.getElementById('dynamic-video-list');
+        if (!container) return;
+
+        if (videos.length === 0) {
+            container.innerHTML = '<div class="no-videos">No videos available</div>';
+            return;
+        }
+
+        const videosHTML = videos.map((video, index) => `
+            <div class="video-item">
+                <div class="video-embed">
+                    <iframe
+                        src="https://www.youtube.com/embed/${video.videoId}?rel=0"
+                        frameborder="0"
+                        allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
+                        allowfullscreen>
+                    </iframe>
+                </div>
+                <div class="video-info">
+                    <h3 class="video-title">${video.title}</h3>
+                    ${video.description ? `<p class="video-description">${video.description}</p>` : ''}
+                </div>
+            </div>
+        `).join('');
+
+        container.innerHTML = videosHTML;
+    }
+
+    showError() {
+        const container = document.getElementById('dynamic-video-list');
+        if (container) {
+            container.innerHTML = '<div class="error">Unable to load videos. Please check back later.</div>';
+        }
+    }
+}
+
+// Initialize MediaManager when DOM loads (only on media page)
+document.addEventListener('DOMContentLoaded', function() {
+    if (document.getElementById('dynamic-video-list')) {
+        new MediaManager();
+    }
+});

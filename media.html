@@ -45,6 +45,10 @@
 
         <section class="content">
             <div class="container">
+                <div class="spotify-embed-section">
+                    <iframe data-testid="embed-iframe" style="border-radius:12px" src="https://open.spotify.com/embed/album/2RpNWNCd2PK2DfwgOnzn59?utm_source=generator" width="100%" height="352" frameBorder="0" allowfullscreen="" allow="autoplay; clipboard-write; encrypted-media; fullscreen; picture-in-picture" loading="lazy"></iframe>
+                </div>
+
                 <div class="media-intro">
                     <p>
                         Explore our musical journey through video performances, recordings, and media appearances. Our work spans both live concert performances and studio recordings that preserve the ancient traditions of Orthodox chant.
@@ -55,54 +59,8 @@
                     <h3>Video Performances</h3>
                     <div class="golden-line"></div>
                     
-                    <div class="video-grid">
-                        <div class="video-placeholder">
-                            <div class="video-thumbnail">
-                                <div class="play-button">▶</div>
-                            </div>
-                            <h4>Byzantine Chant Performance</h4>
-                            <p>Traditional Byzantine melodies performed at [Venue Name]</p>
-                        </div>
-                        
-                        <div class="video-placeholder">
-                            <div class="video-thumbnail">
-                                <div class="play-button">▶</div>
-                            </div>
-                            <h4>Georgian Polyphonic Chant</h4>
-                            <p>Ancient Georgian monastic traditions</p>
-                        </div>
-                        
-                        <div class="video-placeholder">
-                            <div class="video-thumbnail">
-                                <div class="play-button">▶</div>
-                            </div>
-                            <h4>Old Russian Chant</h4>
-                            <p>Ruthenian melodies from the Polish-Lithuanian Commonwealth</p>
-                        </div>
-                        
-                        <div class="video-placeholder">
-                            <div class="video-thumbnail">
-                                <div class="play-button">▶</div>
-                            </div>
-                            <h4>Concert Highlights</h4>
-                            <p>Selection of our most memorable performances</p>
-                        </div>
-                        
-                        <div class="video-placeholder">
-                            <div class="video-thumbnail">
-                                <div class="play-button">▶</div>
-                            </div>
-                            <h4>Behind the Scenes</h4>
-                            <p>Rehearsals and preparation process</p>
-                        </div>
-                        
-                        <div class="video-placeholder">
-                            <div class="video-thumbnail">
-                                <div class="play-button">▶</div>
-                            </div>
-                            <h4>Documentary Feature</h4>
-                            <p>Our mission to preserve Orthodox musical heritage</p>
-                        </div>
+                    <div class="dynamic-video-grid" id="dynamic-video-list">
+                        <div class="loading">Loading videos...</div>
                     </div>
                 </section>
 
